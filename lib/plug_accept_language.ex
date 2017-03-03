@@ -39,6 +39,11 @@ defmodule PlugAcceptLanguage do
     [{locale, 1.0} | acc]
   end
 
-  defp to_q(%{"q" => q}), do: String.to_float(q)
+  defp to_q(%{"q" => q}) do
+    case Float.parse(q) do
+      { num, _ } -> num
+      :error -> 1.0
+    end
+  end
   defp to_q(_), do: 1.0
 end
