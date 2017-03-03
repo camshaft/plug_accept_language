@@ -8,8 +8,8 @@ defmodule PlugAcceptLanguage.Mixfile do
      elixir: "~> 1.0",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     package: package,
-     deps: deps]
+     package: package(),
+     deps: deps()]
   end
 
   def application do
@@ -18,8 +18,8 @@ defmodule PlugAcceptLanguage.Mixfile do
 
   defp deps do
     [{ :plug, "~> 1.0.2", only: [:dev, :test] },
-     { :excheck, "~> 0.2.3", only: [:dev, :test] },
-     { :triq, github: "krestenkrab/triq", only: [:dev, :test] },]
+     { :excheck, "~> 0.5.3", only: [:dev, :test] },
+     { :triq, github: "triqng/triq", only: [:dev, :test] },]
   end
 
   defp package do
