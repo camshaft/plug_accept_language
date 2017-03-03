@@ -5,12 +5,12 @@ defmodule PlugAcceptLanguage.Test do
 
   def smaller(domain, factor \\ 2) do
     sized fn(size) ->
-      resize(:random.uniform((div(size, factor))+1), domain)
+      resize(:rand.uniform((div(size, factor))+1), domain)
     end
   end
 
   defp dec do
-    bind real, fn(value) ->
+    bind real(), fn(value) ->
       abs(value - trunc(value)) |> to_string
     end
   end
@@ -34,19 +34,19 @@ defmodule PlugAcceptLanguage.Test do
   end
 
   defp string do
-    bind unicode_binary, &String.replace(&1, ",", "")
+    bind unicode_binary(), &String.replace(&1, ",", "")
   end
 
   defp param do
     oneof([
-      ["q", dec],
-      [string, string]
+      ["q", dec()],
+      [string(), string()]
     ])
   end
 
   defp params do
     oneof [
-      bind(smaller(list(param), 2), &Enum.join(&1, ";")),
+      bind(smaller(list(param()), 2), &Enum.join(&1, ";")),
       ""
     ]
   end
@@ -58,7 +58,7 @@ defmodule PlugAcceptLanguage.Test do
   end
 
   defp header do
-    bind {ws, locale, ws, ws, params, ws}, fn
+    bind {ws(), locale(), ws(), ws(), params(), ws()}, fn
       ({w1, l, w2, _, "", _}) ->
         [w1,l,w2,"","","",""]
       ({w1, l, w2, w3, p, w4}) ->
@@ -67,12 +67,12 @@ defmodule PlugAcceptLanguage.Test do
   end
 
   defp accepts do
-    smaller(list(header), 2)
+    smaller(list(header()), 2)
   end
 
   @tag timeout: :infinity
   property :plug_x_forwarded_for do
-    for_all hs in list(accepts) do
+    for_all hs in list(accepts()) do
       conn = Enum.reduce(hs, conn(:get, "/"), fn(header, conn = %{req_headers: headers}) ->
         %{conn | req_headers: headers ++ [{"accept-language", Enum.join(header,",")}]}
       end)
