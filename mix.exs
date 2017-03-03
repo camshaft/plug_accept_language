@@ -4,7 +4,7 @@ defmodule PlugAcceptLanguage.Mixfile do
   def project do
     [app: :plug_accept_language,
      description: "parse the accept-language header",
-     version: "0.1.0",
+     version: "0.1.1",
      elixir: "~> 1.0",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -17,7 +17,7 @@ defmodule PlugAcceptLanguage.Mixfile do
   end
 
   defp deps do
-    [{ :plug, "~> 1.0.2", only: [:dev, :test] },
+    [{ :plug, ">= 1.0.0" },
      { :excheck, "~> 0.5.3", only: [:dev, :test] },
      { :triq, github: "triqng/triq", only: [:dev, :test] },]
   end
